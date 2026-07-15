@@ -27,8 +27,8 @@ const SAFE_HASH_RE = /^[a-zA-Z0-9_]{1,64}$/
 app.get('/captcha/:text', async (req, res) => {
   try {
     const text = sanitize(req.params.text, 50)
-    const width = req.query.width ? parseInt(req.query.width) : null
-    const height = req.query.height ? parseInt(req.query.height) : null
+    const width = req.query.width ? parseInt(req.query.width) : undefined
+    const height = req.query.height ? parseInt(req.query.height) : undefined
     const buf = await captcha.generate(text, { width, height })
     res.set('Content-Type', 'image/png').send(buf)
   } catch (e) {
@@ -39,8 +39,8 @@ app.get('/captcha/:text', async (req, res) => {
 app.get('/captcha-reverse/:text', async (req, res) => {
   try {
     const text = sanitize(req.params.text, 50)
-    const width = req.query.width ? parseInt(req.query.width) : null
-    const height = req.query.height ? parseInt(req.query.height) : null
+    const width = req.query.width ? parseInt(req.query.width) : undefined
+    const height = req.query.height ? parseInt(req.query.height) : undefined
     const buf = await captcha.generate(text, { reverse: true, width, height })
     res.set('Content-Type', 'image/png').send(buf)
   } catch (e) {
