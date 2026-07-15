@@ -1,5 +1,5 @@
 import { createCanvas, loadImage, GlobalFonts } from '@napi-rs/canvas'
-import fontkit from 'fontkit'
+import * as fontkit from 'fontkit'
 import { existsSync, readdirSync, readFileSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
@@ -29,7 +29,7 @@ function loadFontsForQuote() {
   for (const f of readdirSync(fontDir)) {
     if (!/\.(ttf|otf)$/i.test(f)) continue
     try {
-      const font = fontkit.openSync(join(fontDir, f))
+      const font = fontkit.default.openSync ? fontkit.default.openSync(join(fontDir, f)) : fontkit.openSync(join(fontDir, f))
       FONT_REGISTRY.push({ family: font.familyName, font })
     } catch {}
   }
