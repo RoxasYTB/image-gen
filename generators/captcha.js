@@ -45,30 +45,38 @@ export class CaptchaGenerator {
 
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
+
+    ctx.globalAlpha = 0.3
     ctx.fillStyle = '#ffe066'
-    ctx.filter = 'blur(32px) drop-shadow(0 0 8px #ffe066)'
-    ctx.fillText(raw, width / 2, height / 2)
-    ctx.filter = 'none'
+    for (let dx = -6; dx <= 6; dx += 4) {
+      for (let dy = -6; dy <= 6; dy += 4) {
+        ctx.fillText(raw, width / 2 + dx, height / 2 + dy)
+      }
+    }
+    ctx.globalAlpha = 1
+    ctx.fillStyle = '#ffe066'
     ctx.fillText(raw, width / 2, height / 2)
 
     const barHeight = Math.round(fontSize * 0.18)
     const barMargin = fontSize * 0.5 + (mw || 0) / 2 + 30
     const barLength = Math.max(width * 0.28, 180)
 
+    ctx.globalAlpha = 0.3
     ctx.strokeStyle = '#ffe066'
-    ctx.filter = 'blur(18px) drop-shadow(0 0 4px #ffe066)'
     ctx.lineWidth = barHeight
-    ctx.beginPath()
-    ctx.moveTo(width / 2 - barMargin - barLength, height / 2)
-    ctx.lineTo(width / 2 - barMargin, height / 2)
-    ctx.stroke()
-    ctx.beginPath()
-    ctx.moveTo(width / 2 + barMargin, height / 2)
-    ctx.lineTo(width / 2 + barMargin + barLength, height / 2)
-    ctx.stroke()
-    ctx.filter = 'none'
-
-    ctx.lineWidth = barHeight
+    for (let dx = -4; dx <= 4; dx += 4) {
+      for (let dy = -4; dy <= 4; dy += 4) {
+        ctx.beginPath()
+        ctx.moveTo(width / 2 - barMargin - barLength + dx, height / 2 + dy)
+        ctx.lineTo(width / 2 - barMargin + dx, height / 2 + dy)
+        ctx.stroke()
+        ctx.beginPath()
+        ctx.moveTo(width / 2 + barMargin + dx, height / 2 + dy)
+        ctx.lineTo(width / 2 + barMargin + barLength + dx, height / 2 + dy)
+        ctx.stroke()
+      }
+    }
+    ctx.globalAlpha = 1
     ctx.beginPath()
     ctx.moveTo(width / 2 - barMargin - barLength, height / 2)
     ctx.lineTo(width / 2 - barMargin, height / 2)
