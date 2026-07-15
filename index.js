@@ -24,7 +24,6 @@ const sanitize = (input, max = 500) => {
 const SAFE_ID_RE = /^[0-9]{1,32}$/
 const SAFE_HASH_RE = /^[a-zA-Z0-9_]{1,64}$/
 
-// ── Captcha ────────────────────────────────────────────
 app.get('/captcha/:text', async (req, res) => {
   try {
     const text = sanitize(req.params.text, 50)
@@ -33,8 +32,7 @@ app.get('/captcha/:text', async (req, res) => {
     const buf = await captcha.generate(text, { width, height })
     res.set('Content-Type', 'image/png').send(buf)
   } catch (e) {
-    console.error('[captcha]', e)
-    res.status(500).send('captcha error')
+    res.status(500).send(`captcha error: ${e?.message || e}`)
   }
 })
 
@@ -46,12 +44,10 @@ app.get('/captcha-reverse/:text', async (req, res) => {
     const buf = await captcha.generate(text, { reverse: true, width, height })
     res.set('Content-Type', 'image/png').send(buf)
   } catch (e) {
-    console.error('[captcha]', e)
     res.status(500).send('captcha error')
   }
 })
 
-// ── Quote ──────────────────────────────────────────────
 app.get('/quote/:text/:author/:username/:avatarId/:avatarHash', async (req, res) => {
   try {
     const q = sanitize(req.params.text, 500)
@@ -62,10 +58,7 @@ app.get('/quote/:text/:author/:username/:avatarId/:avatarHash', async (req, res)
     const idOk = SAFE_ID_RE.test(avatarId)
     const hashOk = SAFE_HASH_RE.test(avatarHash)
     const isPlaceholder = !idOk || !hashOk || avatarId === '0' || avatarHash === '0'
-    const avatarUrl = isPlaceholder
-      ? null
-      : `https://cdn.discordapp.com/avatars/${avatarId}/${avatarHash}.png?size=1024`
-
+    const avatarUrl = isPlaceholder ? null : `https://cdn.discordapp.com/avatars/${avatarId}/${avatarHash}.png?size=1024`
     const buf = await quote.generate({
       avatarUrl,
       quote: q,
@@ -74,12 +67,10 @@ app.get('/quote/:text/:author/:username/:avatarId/:avatarHash', async (req, res)
     })
     res.set('Content-Type', 'image/png').send(buf)
   } catch (e) {
-    console.error('[quote]', e)
     res.status(500).send('quote error')
   }
 })
 
-// ── Welcome ────────────────────────────────────────────
 app.get('/welcome/:language/:number/:username/:avatarId/:avatarHash', async (req, res) => {
   try {
     const msg = sanitize(req.params.username, 200)
@@ -88,22 +79,15 @@ app.get('/welcome/:language/:number/:username/:avatarId/:avatarHash', async (req
     const number = req.params.number
     const language = req.params.language
     const avatarUrl = `https://cdn.discordapp.com/avatars/${avatarId}/${avatarHash}.png?size=1024`
-
     const buf = await welcome.generate({ avatarUrl, message: msg, number, language }).catch(() =>
-      welcome.generate({
-        avatarUrl: 'https://cdn.discordapp.com/embed/avatars/0.png',
-        message: msg, number, language,
-      })
+      welcome.generate({ avatarUrl: 'https://cdn.discordapp.com/embed/avatars/0.png', message: msg, number, language })
     )
     res.set('Content-Type', 'image/png').send(buf)
   } catch (e) {
-    console.error('[welcome]', e)
     res.status(500).send('welcome error')
   }
 })
 
-// ── Health ─────────────────────────────────────────────
 app.get('/health', (_req, res) => res.json({ ok: true, type: 'unified' }))
 
 app.listen(PORT)
-console.log(`[image-gen] listening on :${PORT}`)
