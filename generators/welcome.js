@@ -1,9 +1,12 @@
-import { createCanvas, loadImage } from '@napi-rs/canvas'
+import { createCanvas, loadImage, GlobalFonts } from '@napi-rs/canvas'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(__dirname, '..')
+
+GlobalFonts.registerFromPath(join(ROOT, 'fonts', 'font.ttf'), 'CustomFont')
+GlobalFonts.registerFromPath(join(ROOT, 'fonts', 'NotoSansJP-Bold.ttf'), 'Noto Sans Bold')
 
 const LANG = {
   fr: 'Membre #', en: 'Member #', de: 'Mitglied #', es: 'Miembro #',
@@ -34,7 +37,7 @@ export class WelcomeGenerator {
     } catch {}
 
     const hasCJK = /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\u0400-\u04FF]/.test(message)
-    const fontFamily = hasCJK ? '"Noto Sans JP", "Noto Sans", system-ui, sans-serif' : '"Noto Sans", system-ui, sans-serif'
+    const fontFamily = hasCJK ? '"Noto Sans Bold"' : 'CustomFont'
 
     const avatarX = (this.width - this.avatarSize) / 2
     const avatarY = this.baseTextY + 10
