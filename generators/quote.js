@@ -154,7 +154,7 @@ export class QuoteGenerator {
 
     ctx.font = `${fontSize}px ${FONT_STACK}`
     ctx.textAlign = 'center'
-    const finalLines = this.wrapText(ctx, '"\u201c' + quote + '"\u201d', textAreaWidth, marginTop + availableHeight / 2, textAreaWidth, lines.lineHeight)
+    const finalLines = this.wrapText(ctx, '\u201c' + quote + '\u201d', textAreaWidth, marginTop + availableHeight / 2, textAreaWidth, lines.lineHeight)
 
     for (let i = 0; i < finalLines.lines.length; i++) {
       await this.drawLine(ctx, finalLines.lines[i], textCenterX, finalLines.y + i * finalLines.lineHeight, fontSize, false)

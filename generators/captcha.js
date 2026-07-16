@@ -25,12 +25,12 @@ export class CaptchaGenerator {
       .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase() || 'X'
 
     let fontSize = Math.max(20, Math.round(500 * (w / 3200)))
-    ctx.font = `bold ${fontSize}px system-ui, sans-serif`
+    ctx.font = `bold ${fontSize}px Orbitron, "Noto Sans JP", system-ui, sans-serif`
     let mw = ctx.measureText(raw).width || 0
     const maxW = w * 0.35
     while (fontSize > 20 && mw > maxW) {
       fontSize -= 3
-      ctx.font = `bold ${fontSize}px system-ui, sans-serif`
+      ctx.font = `bold ${fontSize}px Orbitron, "Noto Sans JP", system-ui, sans-serif`
       mw = ctx.measureText(raw).width || 0
     }
 

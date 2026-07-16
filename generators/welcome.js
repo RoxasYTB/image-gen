@@ -34,7 +34,7 @@ export class WelcomeGenerator {
     } catch {}
 
     const hasCJK = /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\u0400-\u04FF]/.test(message)
-    const fontFamily = hasCJK ? 'Noto Sans JP Bold' : 'CustomFont'
+    const fontFamily = hasCJK ? '"Noto Sans JP", "Noto Sans", system-ui, sans-serif' : '"Noto Sans", system-ui, sans-serif'
 
     const avatarX = (this.width - this.avatarSize) / 2
     const avatarY = this.baseTextY + 10
@@ -54,7 +54,7 @@ export class WelcomeGenerator {
     ctx.fillStyle = 'white'
     const welcomeFontSize = Math.max(this.welcomeFontSizeMin,
       this.welcomeFontSizeBase - message.length / 10)
-    ctx.font = `bold ${welcomeFontSize}px "${fontFamily}"`
+    ctx.font = `bold ${welcomeFontSize}px ${fontFamily}`
     ctx.textAlign = 'center'
 
     const textY = hasCJK
@@ -62,7 +62,7 @@ export class WelcomeGenerator {
       : avatarY + this.avatarSize + this.padding * 4
     ctx.fillText(message, this.width / 2, textY)
 
-    ctx.font = `${this.memberFontSize}px "${fontFamily}"`
+    ctx.font = `${this.memberFontSize}px ${fontFamily}`
     ctx.fillStyle = '#8E9296'
     ctx.fillText(`${LANG[language] || 'Member #'}${number}`, this.width / 2, textY + this.textYOffset + 20)
 
